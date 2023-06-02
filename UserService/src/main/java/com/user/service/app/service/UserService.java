@@ -13,4 +13,6 @@ public interface UserService {
 	
 	public User getUserById(String id) throws UserException;
 	
+	public User deleteUser(User user)throws UserException;
+	
 }

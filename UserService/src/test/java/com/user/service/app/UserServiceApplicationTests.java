@@ -3,6 +3,7 @@ package com.user.service.app;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ import com.user.service.app.entity.User;
 import com.user.service.app.exception.UserException;
 import com.user.service.app.repository.UserRepository;
 import com.user.service.app.service.UserService;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -137,6 +139,33 @@ class UserServiceApplicationTests {
 				() ->{
 					userService.getUserById(anyString());
 				});
+	}
+	
+	@Test
+	void deleteUserTest() throws UserException {
+		
+		User user = new User();
+		user.setUserId("1234");
+		user.setName("Demo");
+		user.setEmail("demo@gmail.com");
+		user.setAge(12);
+		user.setAbout("Demo");
+		
+		userService.deleteUser(user);
+		verify(userRepository, times(1)).delete(user);
+	}
+	
+	@Test
+	void deleteUserWithExceptionTest() throws UserException {
+		
+		User user = new User();
+		user.setUserId("1234");
+		user.setName("Demo");
+		user.setEmail("demo@gmail.com");
+		user.setAge(12);
+		user.setAbout("Demo");
+		
+		
 	}
 	
 	

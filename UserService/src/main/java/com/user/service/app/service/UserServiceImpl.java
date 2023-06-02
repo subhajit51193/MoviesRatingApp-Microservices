@@ -2,6 +2,7 @@ package com.user.service.app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User createUser(User user) throws UserException {
 		
+		String randomUserId = UUID.randomUUID().toString();
+		user.setUserId(randomUserId);
 		User newUser =  userRepository.save(user);
 		if (newUser != null) {
 			return newUser;
@@ -53,6 +56,22 @@ public class UserServiceImpl implements UserService{
 			
 		}
 	}
+
+	@Override
+	public User deleteUser(User user) throws UserException {
+		
+		if (user == null) {
+			throw new UserException("Not found");
+		}
+		else {
+			userRepository.delete(user);
+			return user;
+		}
+	}
+
+	
+
+	
 	
 	
 
