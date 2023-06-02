@@ -1,5 +1,6 @@
 package com.user.service.app;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -155,18 +156,6 @@ class UserServiceApplicationTests {
 		verify(userRepository, times(1)).delete(user);
 	}
 	
-	@Test
-	void deleteUserWithExceptionTest() throws UserException {
-		
-		User user = new User();
-		user.setUserId("1234");
-		user.setName("Demo");
-		user.setEmail("demo@gmail.com");
-		user.setAge(12);
-		user.setAbout("Demo");
-		
-		
-	}
 	
 	
 	
