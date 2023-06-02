@@ -69,6 +69,23 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 
+	@Override
+	public User updateUser(String userId,User user) throws UserException {
+		
+		Optional<User> opt = userRepository.findById(userId);
+		if (opt.isEmpty()) {
+			throw new UserException("User not found");
+		}
+		else {
+			User foundUser = opt.get();
+			foundUser.setName(user.getName());
+			foundUser.setEmail(user.getEmail());
+			foundUser.setAge(user.getAge());
+			foundUser.setAbout(user.getAbout());
+			return userRepository.save(foundUser);
+		}
+	}
+
 	
 
 	

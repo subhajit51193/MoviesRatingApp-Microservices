@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +25,14 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/createUser")
+	@PostMapping("/create")
 	public ResponseEntity<User> createUserHandler(@RequestBody User user) throws UserException{
 		
 		User newUser = userService.createUser(user);
 		return new ResponseEntity<>(newUser,HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/allUsers")
+	@GetMapping("/all")
 	public ResponseEntity<List<User>> getAllUsersHandler() throws UserException{
 		List<User> users = userService.getAllUsers();
 		return new ResponseEntity<List<User>>(users,HttpStatus.ACCEPTED);
@@ -48,5 +49,11 @@ public class UserController {
 		User user = userService.getUserById(userId);
 		User deletedUser = userService.deleteUser(user);
 		return new ResponseEntity<User>(deletedUser,HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<User> updateUserHandler(@PathVariable("id") String userId, @RequestBody User user) throws UserException{
+		User updatedUser = userService.updateUser(userId, user);
+		return new ResponseEntity<>(updatedUser,HttpStatus.ACCEPTED);
 	}
 }

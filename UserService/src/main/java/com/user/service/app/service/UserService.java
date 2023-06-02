@@ -15,4 +15,6 @@ public interface UserService {
 	
 	public User deleteUser(User user)throws UserException;
 	
+	public User updateUser(String userId,User user)throws UserException;
+	
 }
