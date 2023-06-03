@@ -78,6 +78,7 @@ public class MovieServiceImpl implements MovieService{
 			Movie foundMovie = opt.get();
 			foundMovie.setName(movie.getName());
 			foundMovie.setReleaseDate(movie.getReleaseDate());
+			foundMovie.setPlot(movie.getPlot());
 			return movieRepository.save(foundMovie);
 		}
 	}
