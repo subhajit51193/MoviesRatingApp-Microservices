@@ -1,6 +1,8 @@
 package com.rating.service.app.service;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +43,45 @@ public class RatingServiceImpl implements RatingService{
 			return allRatings;
 		}
 	}
-
+	
 	@Override
-	public List<Rating> getRatingsByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Rating getRatingById(String ratingId) throws RatingException {
+		
+		Optional<Rating> opt = ratingRepository.findById(ratingId);
+		if (opt == null) {
+			throw new RatingException("Not found");
+		}
+		else {
+			return opt.get();
+		}
+	}
+	
+	
+	@Override
+	public List<Rating> getRatingsByUserId(String userId) throws RatingException {
+		
+		List<Rating> ratings = ratingRepository.findByUserId(userId);
+		if (ratings.isEmpty()) {
+			throw new RatingException("Empty List");
+		}
+		else {
+			return ratings;
+		}
 	}
 
 	@Override
-	public List<Rating> getRatingsByMovieId(String movieId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Rating> getRatingsByMovieId(String movieId) throws RatingException {
+		
+		List<Rating> ratings = ratingRepository.findByMovieId(movieId);
+		if (ratings.isEmpty()) {
+			throw new RatingException("Empty List");
+		}
+		else {
+			return ratings;
+		}
 	}
+
+	
 
 	
 }

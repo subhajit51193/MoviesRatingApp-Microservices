@@ -11,7 +11,9 @@ public interface RatingService {
 	
 	public List<Rating> getAllRating()throws RatingException;
 	
-	public List<Rating> getRatingsByUserId(String userId);
+	public Rating getRatingById(String ratingId)throws RatingException;
 	
-	public List<Rating> getRatingsByMovieId(String movieId);
+	public List<Rating> getRatingsByUserId(String userId) throws RatingException;
+	
+	public List<Rating> getRatingsByMovieId(String movieId)throws RatingException;
 }
