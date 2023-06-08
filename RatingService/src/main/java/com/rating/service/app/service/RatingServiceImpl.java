@@ -60,13 +60,16 @@ public class RatingServiceImpl implements RatingService{
 	@Override
 	public List<Rating> getRatingsByUserId(String userId) throws RatingException {
 		
+//		List<Rating> ratings = ratingRepository.findByUserId(userId);
+//		if (ratings.isEmpty()) {
+//			throw new RatingException("Empty List");
+//		}
+//		else {
+//			return ratings;
+//		}
+		
 		List<Rating> ratings = ratingRepository.findByUserId(userId);
-		if (ratings.isEmpty()) {
-			throw new RatingException("Empty List");
-		}
-		else {
-			return ratings;
-		}
+		return ratings;
 	}
 
 	@Override

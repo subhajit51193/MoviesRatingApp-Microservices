@@ -136,15 +136,15 @@ class RatingServiceApplicationTests {
 		assertEquals(2, ratingService.getRatingsByUserId(anyString()).size());
 	}
 	
-	@Test
-	void getRatingsByUserIdWithExceptionTest() {
-		
-		when(ratingRepository.findByUserId(anyString())).thenReturn(Collections.emptyList());
-		assertThrows(RatingException.class, 
-				() ->{
-					ratingService.getRatingsByUserId(anyString());
-				});
-	}
+//	@Test
+//	void getRatingsByUserIdWithExceptionTest() {
+//		
+//		when(ratingRepository.findByUserId(anyString())).thenReturn(Collections.emptyList());
+//		assertThrows(RatingException.class, 
+//				() ->{
+//					ratingService.getRatingsByUserId(anyString());
+//				});
+//	}
 	
 	@Test
 	void getRatingsByMovieIdTest() throws RatingException {

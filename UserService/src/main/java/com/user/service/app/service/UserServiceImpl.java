@@ -1,12 +1,17 @@
 package com.user.service.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.user.service.app.entity.Rating;
 import com.user.service.app.entity.User;
 import com.user.service.app.exception.UserException;
 import com.user.service.app.repository.UserRepository;
@@ -16,6 +21,12 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
 	@Override
 	public User createUser(User user) throws UserException {
 		
@@ -38,6 +49,12 @@ public class UserServiceImpl implements UserService{
 			throw new UserException("Empty List");
 		}
 		else {
+			
+			for(User user : users) {
+				ArrayList<Rating> ratingsOfUser  = restTemplate.getForObject("http://localhost:8083/rating/users/"+user.getUserId(), ArrayList.class);
+				logger.info("{}",ratingsOfUser);
+				user.setRatings(ratingsOfUser);
+			}
 			return users;
 		}
 		
@@ -52,6 +69,10 @@ public class UserServiceImpl implements UserService{
 		}
 		else {
 			User user = opt.get();
+//			getting rating from object
+			ArrayList<Rating> ratingsOfUser  = restTemplate.getForObject("http://localhost:8083/rating/users/"+user.getUserId(), ArrayList.class);
+			logger.info("{}",ratingsOfUser);
+			user.setRatings(ratingsOfUser);
 			return user;
 			
 		}
