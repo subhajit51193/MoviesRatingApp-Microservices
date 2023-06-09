@@ -1,6 +1,7 @@
 package com.user.service.app.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -24,10 +25,11 @@ public class Rating {
 	private String movieId;
 	
 	@Column(name = "RATING")
-	@Min(0)
-	@Max(10)
 	private Integer rating;
 	
 	@Column(name = "FEEDBACK")
 	private String feedback;
+	
+	
+	private Movie movie;
 }

@@ -1,6 +1,7 @@
 package com.user.service.app.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,9 +9,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.user.service.app.entity.Movie;
 import com.user.service.app.entity.Rating;
 import com.user.service.app.entity.User;
 import com.user.service.app.exception.UserException;
@@ -51,9 +54,21 @@ public class UserServiceImpl implements UserService{
 		else {
 			
 			for(User user : users) {
-				ArrayList<Rating> ratingsOfUser  = restTemplate.getForObject("http://localhost:8083/rating/users/"+user.getUserId(), ArrayList.class);
-				logger.info("{}",ratingsOfUser);
-				user.setRatings(ratingsOfUser);
+//				getting ratings for each userID
+				Rating[] ratingsOfUser  = restTemplate.getForObject("http://RATING-SERVICE/rating/users/"+user.getUserId(), Rating[].class);
+//				logger.info("{}",ratingsOfUser);
+//				converting to arraylist so that it can be set as list
+				List<Rating> ratings = Arrays.stream(ratingsOfUser).toList();
+				for (Rating rating : ratingsOfUser) {
+//					http://localhost:8082/movie/5feca494-9808-4958-8dcb-e02e7a62b956
+//					getting movie for each movieId from rating
+					Movie movie = restTemplate.getForObject("http://MOVIE-SERVICE/movie/"+rating.getMovieId(), Movie.class);
+//					setting movie inside rating
+					rating.setMovie(movie);
+					logger.info("{}",movie);
+				}
+//				seting ratings inside users
+				user.setRatings(ratings);
 			}
 			return users;
 		}
@@ -69,10 +84,20 @@ public class UserServiceImpl implements UserService{
 		}
 		else {
 			User user = opt.get();
-//			getting rating from object
-			ArrayList<Rating> ratingsOfUser  = restTemplate.getForObject("http://localhost:8083/rating/users/"+user.getUserId(), ArrayList.class);
-			logger.info("{}",ratingsOfUser);
-			user.setRatings(ratingsOfUser);
+//			getting ratings from userId
+			Rating[] ratingsOfUser  = restTemplate.getForObject("http://RATING-SERVICE/rating/users/"+user.getUserId(), Rating[].class);
+//			logger.info("{}",ratingsOfUser);
+			List<Rating> ratings = Arrays.stream(ratingsOfUser).toList();
+//			setting movie to rating
+			for (Rating rating : ratingsOfUser) {
+//				http://localhost:8082/movie/5feca494-9808-4958-8dcb-e02e7a62b956
+//				getting movie for each movieId from rating
+				Movie movie = restTemplate.getForObject("http://MOVIE-SERVICE/movie/"+rating.getMovieId(), Movie.class);
+//				setting movie inside rating 
+				rating.setMovie(movie);
+			}
+//			seting ratings inside users
+			user.setRatings(ratings);
 			return user;
 			
 		}
