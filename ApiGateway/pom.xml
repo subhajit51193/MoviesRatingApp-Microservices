@@ -50,6 +50,11 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- additional dependecies for config client -->
+		<dependency>
+		     <groupId>org.springframework.cloud</groupId>
+		     <artifactId>spring-cloud-starter-config</artifactId>
+		 </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

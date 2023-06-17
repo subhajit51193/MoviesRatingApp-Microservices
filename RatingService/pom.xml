@@ -58,6 +58,11 @@
     		<version>4.13.2</version>
     		<scope>test</scope>
 		</dependency>
+		<!-- additional dependecies for config client -->
+		<dependency>
+		     <groupId>org.springframework.cloud</groupId>
+		     <artifactId>spring-cloud-starter-config</artifactId>
+		 </dependency>
 		<!-- additional dependecies for eureka server -->
 		<dependency>
       		<groupId>org.springframework.cloud</groupId>
