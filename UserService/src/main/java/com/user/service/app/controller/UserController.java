@@ -1,5 +1,6 @@
 package com.user.service.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import com.user.service.app.entity.User;
 import com.user.service.app.exception.UserException;
 import com.user.service.app.service.UserService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,12 +36,14 @@ public class UserController {
 	}
 	
 	@GetMapping("/all")
+	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
 	public ResponseEntity<List<User>> getAllUsersHandler() throws UserException{
 		List<User> users = userService.getAllUsers();
 		return new ResponseEntity<List<User>>(users,HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/{id}")
+	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
 	public ResponseEntity<User> getUserByIdhandler(@PathVariable("id") String userId) throws UserException{
 		User foundUser = userService.getUserById(userId);
 		return new ResponseEntity<User>(foundUser,HttpStatus.ACCEPTED);
@@ -56,4 +61,27 @@ public class UserController {
 		User updatedUser = userService.updateUser(userId, user);
 		return new ResponseEntity<>(updatedUser,HttpStatus.ACCEPTED);
 	}
+	
+	//fallback method for Circuit breaker
+	public ResponseEntity<User> ratingMovieFallback(String userId,Exception ex){
+		User user = new User();
+		user.setUserId("9999");
+		user.setEmail("dummy@gmail.com");
+		user.setAge(99);
+		user.setName("dummyName");
+		user.setAbout("This is dummy user created because some services are down");
+		return new ResponseEntity<User>(user,HttpStatus.OK);
+	}
+	public ResponseEntity<List<User>> ratingMovieFallback(Exception ex){
+		User user1 = new User();
+		user1.setUserId("9999");
+		user1.setEmail("dummy@gmail.com");
+		user1.setAge(99);
+		user1.setName("dummyName");
+		user1.setAbout("This is dummy user created because some services are down");
+		List<User> list = new ArrayList<>();
+		list.add(user1);
+		return new ResponseEntity<List<User>>(list,HttpStatus.OK);
+	}
+	
 }
