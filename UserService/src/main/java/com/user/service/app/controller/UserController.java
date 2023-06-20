@@ -20,6 +20,7 @@ import com.user.service.app.exception.UserException;
 import com.user.service.app.service.UserService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
 @RequestMapping("/user")
@@ -36,14 +37,16 @@ public class UserController {
 	}
 	
 	@GetMapping("/all")
-	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
+	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallbacks")
 	public ResponseEntity<List<User>> getAllUsersHandler() throws UserException{
 		List<User> users = userService.getAllUsers();
 		return new ResponseEntity<List<User>>(users,HttpStatus.ACCEPTED);
 	}
 	
+	
 	@GetMapping("/{id}")
-	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
+//	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
+	@Retry(name = "ratingMovieService", fallbackMethod = "ratingMovieFallback")
 	public ResponseEntity<User> getUserByIdhandler(@PathVariable("id") String userId) throws UserException{
 		User foundUser = userService.getUserById(userId);
 		return new ResponseEntity<User>(foundUser,HttpStatus.ACCEPTED);
@@ -72,7 +75,7 @@ public class UserController {
 		user.setAbout("This is dummy user created because some services are down");
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
-	public ResponseEntity<List<User>> ratingMovieFallback(Exception ex){
+	public ResponseEntity<List<User>> ratingMovieFallbacks(Exception ex){
 		User user1 = new User();
 		user1.setUserId("9999");
 		user1.setEmail("dummy@gmail.com");
