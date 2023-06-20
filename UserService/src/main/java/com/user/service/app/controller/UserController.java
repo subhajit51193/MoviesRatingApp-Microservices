@@ -20,6 +20,7 @@ import com.user.service.app.exception.UserException;
 import com.user.service.app.service.UserService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
@@ -46,7 +47,8 @@ public class UserController {
 	
 	@GetMapping("/{id}")
 //	@CircuitBreaker(name = "ratingMovieBreaker",fallbackMethod = "ratingMovieFallback")
-	@Retry(name = "ratingMovieService", fallbackMethod = "ratingMovieFallback")
+//	@Retry(name = "ratingMovieService", fallbackMethod = "ratingMovieFallback")
+	@RateLimiter(name = "userRateLimiter", fallbackMethod = "ratingMovieFallback")
 	public ResponseEntity<User> getUserByIdhandler(@PathVariable("id") String userId) throws UserException{
 		User foundUser = userService.getUserById(userId);
 		return new ResponseEntity<User>(foundUser,HttpStatus.ACCEPTED);
