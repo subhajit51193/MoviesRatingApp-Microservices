@@ -43,6 +43,6 @@ public class AuthController {
 		
 		authResponse.setAuthorities(authorities);
 		
-		return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
+		return new ResponseEntity<>(authResponse,HttpStatus.OK);
 	}
 }
