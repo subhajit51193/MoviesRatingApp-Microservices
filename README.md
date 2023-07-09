@@ -1,3 +1,6 @@
+## Screenshots
+
+![App Screenshot](https://raw.githubusercontent.com/subhajit51193/MoviesRatingApp-Microservices/main/MicroserviceServiceRegistry.jpg)
 
 # MoviesRatingApp
 it is an application where users can rate movies and give feedback. It has been created using microservices architecture where services communicate between each other to get the desired data. 
